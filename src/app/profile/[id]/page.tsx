@@ -1,3 +1,4 @@
+import Link from "next/link"
 
 
 const UserProfile = ({params}: any) => {
@@ -8,6 +9,9 @@ const UserProfile = ({params}: any) => {
         Welcome user: 
         <span>{params.id}</span>
       </p>
+      <Link href={'/profile'} className="hover:underline">
+        Back to profile dashboard
+      </Link>
     </div>
   )
 }
