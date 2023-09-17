@@ -24,23 +24,22 @@ const ResetPage = () => {
 
         const response = axios.post('/api/users/resetpassword', {user, token});
         const {status} = await response;
-        console.log(status);
-        
-        if(true) {
+        if(status === 200) {
           router.push('/login');
           toast.success("Successfully changed password")
         } else {
+          router.push('/login');
           toast.error("Something went wrong")
         }
         setLoading(false);
       }      
       else if((user.password !== user.confirmPassword) || (user.password.length < 3) || (user.confirmPassword.length < 3)) {
         toast.error("Both password and confirm password must be same and must contain atleast 3 characters!")
-        setLoading(false);
       }
     } catch (error:any) {
       setLoading(false);
       toast.error(error.message);
+      router.push('/login')
     }
   }
 
