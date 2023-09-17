@@ -27,8 +27,7 @@ const ResetPage = () => {
         console.log(status);
         
         if(true) {
-          // router.push('/login');
-          
+          router.push('/login');
           toast.success("Successfully changed password")
         } else {
           toast.error("Something went wrong")
