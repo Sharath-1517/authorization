@@ -4,10 +4,10 @@ import bcryptjs from 'bcryptjs';
 
 export const sendEmail = async({email, emailType, userId}:any) => {
   try {
-    // Token generation
+    // Token generation;
+
     const hashedToken = await bcryptjs.hash(userId.toString(), 10);
 
-    
     if(emailType === "VERIFY") {
       await User.findByIdAndUpdate(userId,
         {
@@ -36,12 +36,15 @@ export const sendEmail = async({email, emailType, userId}:any) => {
       }
     });
 
+    const html = 
+    `<p>Copy and paste the below link in your browser<br/>${process.env.DOMAIN}/${emailType === "VERIFY" ? "verifyemail" : "resetpassword"}?token=${hashedToken}</p>
+    `;
+
     const mailOptions = {
       from: 'sharathlingam10@gmail.com',
       to: email,
       subject: emailType === "VERIFY" ? "Verify your email" : "Reset your password",
-      html: 
-      `<p>Click <a href="${process.env.DOMAIN}/verifyemail?token=${hashedToken}">here</a> to ${emailType === "VERIFY" ? "verify your email" : "reset your password"} or copy and paste the below link in your browser<br/>${process.env.DOMAIN}/verifyemail?token=${hashedToken}</p>`
+      html: html
     }
 
     const mailResponse = await transport.sendMail(mailOptions);

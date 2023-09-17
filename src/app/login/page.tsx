@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
-import React, {useEffect} from "react";
-import {useRouter} from "next/navigation";
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
-import toast, {Toaster} from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 
 
@@ -28,51 +28,66 @@ export default function LoginPage() {
             toast.success("Login success", {
                 position: 'top-right'
             });
-        } catch (error:any) {
-            console.log("Login failed", error.message);
-            toast.error(`Unable to login \n${error.message}`, {
+        } catch (error: any) {
+            const errorMessage = (user.email.length <= 0 || user.password.length <= 0) ? "Please fill out the fields" : "User does not exist or \nInvalid Email or password"
+            toast.error(`Unable to login \n${errorMessage}`, {
                 position: 'top-right'
             });
-        } finally{
-        setLoading(false);
+        } finally {
+            setLoading(false);
+            setUser(prevState => {
+                return {
+                    ...prevState,
+                    email: "",
+                    password: "",
+                }
+            })
         }
     }
 
     useEffect(() => {
-        if(user.email.length > 0 && user.password.length > 0) {
+        if (user.email.length > 0 && user.password.length > 0) {
             setButtonDisabled(false);
-        } else{
+        } else {
             setButtonDisabled(true);
         }
     }, [user]);
 
     return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-        <h1>{loading ? "Processing" : "Login"}</h1>
-        <hr />
-        <Toaster />
-        <label htmlFor="email">email</label>
-        <input 
-        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
-            id="email"
-            type="text"
-            value={user.email}
-            onChange={(e) => setUser({...user, email: e.target.value})}
-            placeholder="email"
-            />
-        <label htmlFor="password">password</label>
-        <input 
-        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
-            id="password"
-            type="password"
-            value={user.password}
-            onChange={(e) => setUser({...user, password: e.target.value})}
-            placeholder="password"
-            />
+        <div className="flex flex-col items-center justify-center min-h-screen py-2">
+            <h1 className="text-2xl font-bold">{loading ? "Processing" : "Login"}</h1>
+            <hr />
+            <Toaster />
+            <div className="flex flex-col justify-start mt-5">
+                <label htmlFor="email">Email</label>
+                <input
+                    className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
+                    id="email"
+                    type="text"
+                    value={user.email}
+                    onChange={(e) => setUser({ ...user, email: e.target.value })}
+                    placeholder="email"
+                    autoComplete="email"
+                />
+                <label htmlFor="password">Password</label>
+                <input
+                    className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
+                    id="password"
+                    type="password"
+                    value={user.password}
+                    onChange={(e) => setUser({ ...user, password: e.target.value })}
+                    placeholder="password"
+                />
+            </div>
             <button
-            onClick={onLogin}
-            className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600">Login here</button>
-            <Link href="/signup">Visit Signup page</Link>
+                onClick={onLogin}
+                className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 hover:bg-black hover:text-white">
+                Login here
+            </button>
+            <div className="flex justify-between items-center flex-wrap gap-5">
+                <Link href="/forgotpassword" className="hover:underline bg-black text-white p-2 rounded-md">Forgot password?</Link>
+                <Link href="/signup" className="hover:underline">Visit Signup page</Link>
+            </div>
         </div>
     )
 

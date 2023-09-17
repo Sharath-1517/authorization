@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-connect()
+connect();
 
 export async function POST(request: NextRequest){
     try {
@@ -15,7 +15,7 @@ export async function POST(request: NextRequest){
         //check if user exists
         const user = await User.findOne({email})
         if(!user){
-            return NextResponse.json({error: "User does not exist"}, {status: 400})
+            return NextResponse.json({error: "User does not exist or\nEmail and password is wrong"}, {status: 400})
         }
         
         
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest){
             email: user.email
         }
         //create token
-        const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET!, {expiresIn: "1d"})
+        const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, {expiresIn: "1d"})
 
         const response = NextResponse.json({
             message: "Login successful",
