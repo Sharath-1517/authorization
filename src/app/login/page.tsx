@@ -24,15 +24,11 @@ export default function LoginPage() {
             setLoading(true);
             const response = await axios.post("/api/users/login", user);
             router.push("/profile");
-            console.log("Login success", response.data);
-            toast.success("Login success", {
+            toast.success(response.data.message, {
                 position: 'top-right'
-            });
+            });            
         } catch (error: any) {
-            const errorMessage = (user.email.length <= 0 || user.password.length <= 0) ? "Please fill out the fields" : "User does not exist or \nInvalid Email or password"
-            toast.error(`Unable to login \n${errorMessage}`, {
-                position: 'top-right'
-            });
+            toast.error(error.response.data.error);
         } finally {
             setLoading(false);
             setUser(prevState => {
