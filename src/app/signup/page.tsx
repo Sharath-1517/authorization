@@ -25,8 +25,7 @@ export default function SignupPage() {
             router.push("/login");
             toast.success(`Signup successful`);
         } catch (error: any) {
-            const errorMessage = (user.email.length <= 0 || user.username.length <= 0 || user.password.length <= 0) ? "Fill all the fields" : "User already exists"
-            toast.error(`Signup failed!\n${errorMessage}`);
+            toast.error(`Signup failed!\n${error.response.data.error}`);
         } finally {
             setLoading(false);
         }

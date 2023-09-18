@@ -16,23 +16,16 @@ const ForgotPassword = () => {
 
   const handleClick = async() => {
     try {
-      setButton("Loading request...");
-      if(email.length <= 0) {
-        toast.error("Invalid email address");
-        setButton("Submit");
-      } else {
         const response = await axios.post('/api/users/forgotpassword', {email});
-        if(response.status === 200) {
-          toast.success("Reset link sent to your email");
-          setButton("Submit");
-          router.push('/login');
-        }
-      }
+        console.log(response);
+        toast.success(response.data.message);
+        setButton("Submit");
+        router.push('/login');
     } catch (error:any) {
-      toast.error(error.message)
+      toast.error(error.response.data.error)
     } finally {
       setButton("Submit");
-      // setEmail("");
+      setEmail("");
     }
   };
 
